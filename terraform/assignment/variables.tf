@@ -17,6 +17,17 @@ variable "env" {
   default = "dev"
 }
 
+
 variable "project" {
     type = string
+}
+
+variable "repo_name" {
+  type = string
+  description = "ECR repository name"
+}
+
+variable "lambda_name" {
+  type = string
+  description = "Lambda function name"
 }

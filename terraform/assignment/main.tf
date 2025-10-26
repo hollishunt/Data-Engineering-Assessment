@@ -1,27 +1,26 @@
-## Update the following terraform code to meet the project requirements
-## We have provided some sample code to help you get started
+## Terraform Code calling each module to deploy the S3 --> Lambda --> S3 Pipeline
 
-resource "aws_s3_bucket" "input_s3" {
-  bucket = "${local.app_name}-input-bucket"
-  tags = merge({
-        Name        = "${local.app_name}-input-bucket"
-        Environment = "${var.env}"
-    }, local.default_tags
-  )
-  force_destroy = true
+module "s3_buckets" {
+  source = "../modules/s3"
+  app_name = local.app_name
+  env = var.env
+  lambda_arn = module.lambda_function.lambda_arn
+  default_tags = local.default_tags
 }
 
 module "lambda_function" {
   source                  = "../modules/lambda"
   lambda_name             = "${local.app_name}-file-processor"
-  role_name               = "${local.app_name}-file-processor-role"
+  role_name               = "${local.app_name}-file-processor-role" 
   log_retention_in_days   = 14
   image_uri               = "${module.ecr_repo.repository_url}:latest"
   timeout                 = 15
   memory_size             = 256
   environment_variables   = {
-    EXAMPLE_VAR = "value"
+    INPUT_BUCKET = module.s3_buckets.input_bucket_name
+    OUTPUT_BUCKET = module.s3_buckets.output_bucket_name
   }
+  input_bucket_arn = module.s3_buckets.input_bucket_arn
 
   default_tags = local.default_tags
 }
@@ -32,20 +31,12 @@ module "ecr_repo" {
   default_tags = local.default_tags
 }
 
-resource "aws_lambda_permission" "allow_bucket" {
-  statement_id  = "AllowExecutionFromS3Bucket"
-  action        = "lambda:InvokeFunction"
-  function_name = module.lambda_function.lambda_arn
-  principal     = "s3.amazonaws.com"
-  source_arn    = aws_s3_bucket.input_s3.id
+module "iam_policies" {
+  source = "../modules/iam"
+  lambda_role_name = module.lambda_function.lambda_exec_role_name
+  input_bucket_arn = module.s3_buckets.input_bucket_arn
+  output_bucket_arn = module.s3_buckets.output_bucket_arn
+  default_tags = local.default_tags
 }
 
-resource "aws_s3_bucket_notification" "s3_notification" {
-  bucket = aws_s3_bucket.input_s3.id
-  lambda_function {
-    lambda_function_arn = module.lambda_function.lambda_arn
-    events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = "*"
-    filter_suffix       = ".csv"
-  }
-}
+

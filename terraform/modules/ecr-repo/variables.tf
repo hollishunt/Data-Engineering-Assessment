@@ -1,6 +1,9 @@
 
 # Variables
-variable "repo_name" {}
+variable "repo_name" {
+  type = string
+  description = "Name of the repo"
+}
 
 variable "default_tags" {
   type = map(string)
