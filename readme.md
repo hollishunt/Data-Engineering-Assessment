@@ -10,6 +10,8 @@ This project implements a serverless data processing pipeline using AWS services
 - **ECR**: Container registry for Lambda Docker image
 - **IAM**: Least privilege policies for secure access
 
+![Architecture Diagram](architecture.drawio.png)
+
 ## Analytics Generated
 1. **Most Profitable Region**: Calculates total profit by region
 2. **Shipping Method by Category**: Most common shipping method for each product category
@@ -101,6 +103,7 @@ aws s3 ls s3://<output-bucket-name>/analytics/ --recursive
 │       ├── lambda/          # Lambda function module
 │       └── s3/              # S3 buckets module
 ├── .gitignore               # Gitignore
+├── architecture.drawio.png  # Architecture Diagram
 ├── instructions.md          # Project instructions
 ├── readme.md                # README.md for deployment instructions
 └── sample_orders.csv        # Test data
