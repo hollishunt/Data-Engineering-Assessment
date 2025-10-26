@@ -83,16 +83,25 @@ aws s3 ls s3://<output-bucket-name>/analytics/ --recursive
 ## File Structure
 ```
 ├── app/
-│   ├── lambda.py              # Main Lambda handler
-│   ├── orders_analytics.py    # Analytics logic
-│   └── requirements.txt       # Python dependencies
+│   ├── Dockerfile            # Lambda container definition
+│   ├── lambda.py             # Main Lambda handler
+│   ├── orders_analytics.py   # Analytics logic
+│   └── requirements.txt      # Python dependencies
 ├── terraform/
-│   ├── assignment/            # Main Terraform configuration
+│   ├── assignment/          # Main Terraform configuration
+│   │   ├── aws.tf           # AWS provider configuration
+│   │   ├── locals.tf        # Local variables
+│   │   ├── main.tf          # Main infrastructure
+│   │   ├── outputs.tf       # Output values
+│   │   ├── variables.tf     # Variable definitions
+│   │   └── vars.tfvars      # Variable values
 │   └── modules/
-│       ├── ecr-repo/         # ECR repository module
-│       ├── lambda/           # Lambda function module
-│       ├── s3/               # S3 buckets module
-│       └── iam/              # IAM policies module
-├── Dockerfile                # Lambda container definition
-└── sample_orders.csv         # Test data
+│       ├── ecr-repo/        # ECR repository module
+│       ├── iam/             # IAM policies module
+│       ├── lambda/          # Lambda function module
+│       └── s3/              # S3 buckets module
+├── .gitignore               # Gitignore
+├── instructions.md          # Project instructions
+├── readme.md                # README.md for deployment instructions
+└── sample_orders.csv        # Test data
 ```
