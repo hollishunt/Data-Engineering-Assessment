@@ -1,4 +1,4 @@
-## Terraform Code calling each module to deploy the S3 --> Lambda --> S3 Pipeline
+## Terraform Code calling each module to deploy the S3 --> Lambda --> S3 Order Processing Pipeline
 
 module "s3_buckets" {
   source = "../modules/s3"

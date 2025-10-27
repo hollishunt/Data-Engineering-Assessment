@@ -31,11 +31,13 @@ def lambda_handler(event, context):
         # Generate analytics
         analytics = orders_analytics.generate_analytics(df)
         
-        # Upload results to output bucket with partitioning by date
+        # Upload results to output bucket with partitioning by date and time
         timestamp = datetime.now().strftime('%Y/%m/%d')
+        time_suffix = datetime.now().strftime('%H%M%S')
+        input_filename = input_key.split('/')[-1].replace('.csv', '')
         
         for report_name, report_df in analytics.items():
-            output_key = f"analytics/{timestamp}/{report_name}.csv"
+            output_key = f"analytics/{timestamp}/{report_name}_{input_filename}_{time_suffix}.csv"
             csv_buffer = report_df.to_csv(index=False)
             
             s3_client.put_object(
