@@ -112,4 +112,5 @@ terraform destroy -var-file="vars.tfvars"
 ├── instructions.md          # Project instructions
 ├── readme.md                # README.md for deployment instructions
 └── sample_orders.csv        # Test data
+└── test_analytics.py        # Test script for calculating desired outcomes
 ```
