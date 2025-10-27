@@ -5,6 +5,7 @@ module "s3_buckets" {
   app_name = local.app_name
   env = var.env
   lambda_arn = module.lambda_function.lambda_arn
+  lambda_permission_id = module.lambda_function.lambda_permission_id
   default_tags = local.default_tags
 }
 

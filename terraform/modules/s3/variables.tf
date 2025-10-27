@@ -17,3 +17,8 @@ variable "default_tags" {
   type        = map(string)
   description = "Default tags to apply to all resources"
 }
+
+variable "lambda_permission_id" {
+  description = "Lambda permission resource ID for dependency"
+  type        = string
+}

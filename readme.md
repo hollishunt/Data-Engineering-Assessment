@@ -54,7 +54,7 @@ Output files are partitioned by date using the pattern: `analytics/YYYY/MM/DD/re
    REGION="us-west-2"
    
    # Build and push
-   docker build --platform linux/arm64 --no-cache -t "$LOCAL_IMAGE_NAME" ./app
+   docker build --platform linux/amd64 --provenance=false --no-cache -t "$LOCAL_IMAGE_NAME" ./app
    aws ecr get-login-password | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com"
    docker tag "$LOCAL_IMAGE_NAME" "$ECR_URI"
    docker push "$ECR_URI"
@@ -74,6 +74,11 @@ aws s3 cp sample_orders.csv s3://<input-bucket-name>/
 Check for generated reports:
 ```bash
 aws s3 ls s3://<output-bucket-name>/analytics/ --recursive
+```
+
+### Destroy Resources 
+```bash
+terraform destroy -var-file="vars.tfvars"
 ```
 
 ## Security Features
